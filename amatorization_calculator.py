@@ -5,11 +5,13 @@ from amortization.amount import calculate_amortization_amount
 from amortization.schedule import amortization_schedule
 from tabulate import tabulate
 
+#set default tax, registration, and titling fees
 tr = .07
 title = 71.5
 reg = 60
 fees = title + reg
 
+#primary function to calculate the amortization schedule.
 def precalc(term):
 
     amount = calculate_amortization_amount(price, ir, term)
@@ -20,6 +22,7 @@ def precalc(term):
         total = total + amount
         i = i + interest
 
+    #display length of loan, monthly payments, annual cost, and total costs of interest and total
     print()
     print('Term length: ', term, 'mo')
     print('Monthly Payment: ', "%.2f" % amount)
@@ -27,6 +30,7 @@ def precalc(term):
     print('Total Cost:  ', "%.2f" % total)
     print('Annual Cost: ', "%.2f" % (total/12))
 
+    #print out full schedule, not included in program execution
     table = (x for x in amortization_schedule(price, ir, term))
     print(
         tabulate(
@@ -42,7 +46,7 @@ while start == 'Y':
     os.system("clear")
     sticker = float(input('Enter the price of the vehicle:  ') or 0)
     dp = float(input('Enter downpayment amount:  ') or 0)
-    ir = float(input('Enter interest rate:  ') or .18)
+    ir = (float(input('Enter interest rate:  ') or 18) * .01) / 12
     tax = sticker * tr
     price = tax + sticker + title + reg - dp
 
@@ -53,6 +57,7 @@ while start == 'Y':
     print('Total Borrowed:  ', "%.2f" % price)
     print('Interest Rate: ', "%.2f" % ir)
     
+    #loop prints out loan scenario 1y - 5yr
     for t in range(1, 6):
         term = t * 12
         precalc(term)
